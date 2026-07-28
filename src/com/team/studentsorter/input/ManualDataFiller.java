@@ -5,14 +5,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ManualDataFiller implements DataFiller {
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
+
+    // Scanner передаём извне — второй сканер на System.in создавать нельзя
+    public ManualDataFiller(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
     @Override
     public List<Student> fill(int size) {
-        // TODO (Максим): цикл от 0 до size-1:
-        //   запросить 3 поля, собрать через Builder.
-        //   Builder.build() бросит IllegalArgumentException при невалидных данных —
-        //   поймать, вывести сообщение, попросить ввести заново (i не увеличивать).
-        return null;
+        // реализация Максима: цикл 0..size-1,
+        // чтение полей через this.scanner, сборка через Builder,
+        // при IllegalArgumentException — сообщение и повторный запрос
+        return null; // заглушка
     }
 }

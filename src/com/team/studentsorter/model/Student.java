@@ -13,9 +13,17 @@ public class Student {
         this.recordBookNumber = builder.recordBookNumber;
     }
 
-    public int getGroupNumber() { return groupNumber; }
-    public double getAverageGrade() { return averageGrade; }
-    public int getRecordBookNumber() { return recordBookNumber; }
+    public int getGroupNumber() {
+        return groupNumber;
+    }
+
+    public double getAverageGrade() {
+        return averageGrade;
+    }
+
+    public int getRecordBookNumber() {
+        return recordBookNumber;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -34,9 +42,9 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student group=" + groupNumber
+        return "Student{group=" + groupNumber
                 + ", avgGrade=" + averageGrade
-                + ", recordBook=" + recordBookNumber + ".";
+                + ", recordBook=" + recordBookNumber + "}";
     }
 
     public static class Builder {
@@ -60,7 +68,6 @@ public class Student {
         }
 
         public Student build() {
-            // Валидация прямо в build() — невозможно создать «кривого» студента
             com.team.studentsorter.validation.StudentValidator
                     .validate(groupNumber, averageGrade, recordBookNumber);
             return new Student(this);
