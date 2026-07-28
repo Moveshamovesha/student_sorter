@@ -120,7 +120,7 @@ student-sorter/
 
 ```bash
 # компиляция
-javac -d out src/com/team/studentsorter/*.java src/com/team/studentsorter/*/*.java
+javac -encoding UTF-8 -d out src/com/team/studentsorter/*.java src/com/team/studentsorter/*/*.java 
 
 # запуск приложения
 java -cp out com.team.studentsorter.Main
