@@ -33,35 +33,49 @@ student-sorter/
 │   └── students.txt                  ← входные данные (формат: "группа;балл;зачётка")
 ├── output/
 │   └── results.txt                   ← результаты работы (режим добавления)
-└── src/
-    ├── com/team/studentsorter/       ← основной код
-    │   ├── Main.java                 ← точка входа
-    │   ├── menu/
-    │   │   └── ConsoleMenu.java      ← главный цикл, меню, склейка модулей
-    │   ├── model/
-    │   │   └── Student.java          ← класс Студент + Builder (валидация в build())
-    │   ├── validation/
-    │   │   └── StudentValidator.java ← диапазоны полей, validate() и isValid()
-    │   ├── input/                    ← стратегии заполнения (паттерн Стратегия)
-    │   │   ├── DataFiller.java       ← интерфейс: List<Student> fill(int size)
-    │   │   ├── ManualDataFiller.java ← ручной ввод с повторным запросом при ошибке
-    │   │   ├── RandomDataFiller.java ← генерация через Stream.generate().limit()
-    │   │   └── FileDataFiller.java   ← Files.lines() → parse → filter(isValid)
-    │   ├── collection/
-    │   │   └── StudentList.java      ← кастомная коллекция (доп. 3*)
-    │   ├── sort/                     ← стратегии сортировки (паттерн Стратегия)
-    │   │   ├── SortStrategy.java     ← интерфейс: sort(List, Comparator)
-    │   │   ├── SelectionSortStrategy.java ← сортировка выбором (своя)
-    │   │   ├── QuickSortStrategy.java     ← быстрая сортировка (своя)
-    │   │   ├── StudentComparators.java    ← компараторы по 3 полям + комбинированный
-    │   │   └── EvenFieldSort.java         ← доп. 1: чётные сортируются, нечётные на месте
-    │   ├── search/
-    │   │   └── BinarySearch.java     ← свой бинарный поиск
-    │   ├── io/
-    │   │   └── ResultWriter.java     ← доп. 2: запись в файл (APPEND)
-    │   └── threads/
-    │       └── OccurrenceCounter.java← доп. 4: многопоточный подсчёт вхождений
-    └── test/com/team/studentsorter/  ← тесты (без сторонних библиотек)
+├── src/                            ← Sources Root
+│   └── com/team/studentsorter/       ← основной код
+│       ├── Main.java                 ← точка входа
+│       ├── menu/                     ← интерфейс (паттерн Команда)
+│       │   ├── MenuAction.java       ← интерфейс команды: title() + execute(ctx)
+│       │   ├── AppContext.java       ← общее состояние: данные, флаг running, ввод
+│       │   ├── ConsoleInput.java     ← безопасный ввод (Scanner-утилиты)
+│       │   ├── ConsoleMenu.java      ← цикл + таблица команд (Map)
+│       │   └── actions/              ← по классу на пункт меню
+│       │       ├── FillAction.java        ← заполнение данных
+│       │       ├── SortAction.java        ← сортировка
+│       │       ├── EvenSortAction.java    ← доп. 1
+│       │       ├── FindAction.java        ← бинарный поиск
+│       │       ├── WriteAction.java       ← доп. 2
+│       │       ├── CountAction.java       ← доп. 4
+│       │       ├── PrintAction.java       ← вывод всех
+│       │       ├── ExitAction.java        ← выход (только здесь)
+│       │       └── StrategyPicker.java    ← выбор алгоритма сортировки
+│       ├── model/
+│       │   └── Student.java          ← класс Студент + Builder (валидация в build())
+│       ├── validation/
+│       │   └── StudentValidator.java ← диапазоны полей, validate() и isValid()
+│       ├── input/                    ← стратегии заполнения (паттерн Стратегия)
+│       │   ├── DataFiller.java       ← интерфейс: List<Student> fill(int size)
+│       │   ├── ManualDataFiller.java ← ручной ввод с повторным запросом при ошибке
+│       │   ├── RandomDataFiller.java ← генерация через Stream.generate().limit()
+│       │   └── FileDataFiller.java   ← Files.lines() → parse → filter(isValid)
+│       ├── collection/
+│       │   └── StudentList.java      ← кастомная коллекция (доп. 3*)
+│       ├── sort/                     ← стратегии сортировки (паттерн Стратегия)
+│       │   ├── SortStrategy.java     ← интерфейс: sort(List, Comparator)
+│       │   ├── SelectionSortStrategy.java ← сортировка выбором (своя)
+│       │   ├── QuickSortStrategy.java     ← быстрая сортировка (своя)
+│       │   ├── StudentComparators.java    ← компараторы по 3 полям + комбинированный
+│       │   └── EvenFieldSort.java         ← доп. 1: чётные сортируются, нечётные на месте
+│       ├── search/
+│       │   └── BinarySearch.java     ← свой бинарный поиск
+│       ├── io/
+│       │   └── ResultWriter.java     ← доп. 2: запись в файл (APPEND)
+│       └── threads/
+│           └── OccurrenceCounter.java← доп. 4: многопоточный подсчёт вхождений
+└── test/                           ← Test Sources Root
+    └── com/team/studentsorter/  ← тесты (без сторонних библиотек)
         ├── TestRunner.java           ← запуск всех тестов
         ├── SimpleAssert.java         ← собственные утверждения
         ├── StudentTest.java
