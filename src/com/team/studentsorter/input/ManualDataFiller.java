@@ -5,6 +5,8 @@ import com.team.studentsorter.model.Student;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ManualDataFiller implements DataFiller {
@@ -14,29 +16,40 @@ public class ManualDataFiller implements DataFiller {
         this.scanner = scanner;
     }
 
-    // TODO: проверить
     @Override
-    public List<Student> fill(int size) {
+    public List<Student> fill(int size) throws IllegalArgumentException{
+        if (size < 0) {
+            throw new IllegalArgumentException("Отрицательный размер списка");
+        }
+
         ConsoleHandler console = new ConsoleHandler(scanner);
         List<Student> students = new ArrayList<>();
 
         for (int i=0; i<size;) {
-            int group = console.readInt("Введите группу студента: ");
-            double average = console.readDouble("Введите среднюю оценку (допускается нецелое число через точку): ");
-            int book = console.readInt("Введите номер зачётной книжки: ");
-
             try {
+                int group = console.readInt("Группа: ");
+                double average = console.readDouble("Средняя оценка (нецелое число через точку): ");
+                int book = console.readInt("Номер зачётной книжки: ");
+            
                 students.add(new Student.Builder()
                     .groupNumber(group)
                     .averageGrade(average)
                     .recordBookNumber(book)
                     .build());
+                
                 i++;
                 console.println("Студент успешно добавлен в список.");
 
             } catch (IllegalArgumentException e) {
+                console.println("Запись студента не создана:");
                 console.println(e.getMessage());
                 console.println("Введите данные студента ещё раз.");
+            } catch (InputMismatchException e){
+                console.println("Ошибка ввода. Повторите попытку.");
+                scanner.next();
+            } catch (NoSuchElementException e) {
+                console.println("Ошибка: стрим ввода данных неожиданно прервался. Остановка ввода новых записей.");
+                return students;
             }
         }
 
@@ -50,6 +63,7 @@ class ConsoleHandler {
 
     public ConsoleHandler(Scanner scanner) {
         this.scanner = scanner;
+        scanner.useLocale(Locale.US);
     }
 
     public void print(String text) {
@@ -60,29 +74,14 @@ class ConsoleHandler {
         System.out.println(text);
     }
 
-    public int readInt(String askText) {
+    public int readInt(String askText) throws InputMismatchException {
         print(askText);
-        while (true) {
-            try {
-                return scanner.nextInt();
-            } catch (InputMismatchException e) {
-                printErrorMessage();
-            }
-        }
+        return scanner.nextInt();
     }
 
-    public double readDouble(String askText) {
+    public double readDouble(String askText) throws InputMismatchException {
         print(askText);
-        while (true) {
-            try {
-                return scanner.nextDouble();
-            } catch (InputMismatchException e) {
-                printErrorMessage();
-            }
-        }
+        return scanner.nextDouble();
     }
 
-    private void printErrorMessage() {
-       print("Ошибка ввода. Повторите попытку: ");
-    }
 }
