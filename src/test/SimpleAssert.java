@@ -1,4 +1,4 @@
-package com.team.studentsorter;
+package test;
 
 public class SimpleAssert {
     private static int passed = 0;
@@ -26,6 +26,16 @@ public class SimpleAssert {
             assertTrue(false, testName + " (исключение " + type.getSimpleName() + " не брошено)");
         } catch (Exception e) {
             assertTrue(type.isInstance(e),
+                    testName + " (брошено " + e.getClass().getSimpleName() + ": " + e.getMessage() + ")");
+        }
+    }
+
+    public static void assertNoThrows(Runnable code, String testName) {
+        try {
+            code.run();
+            assertTrue(true, testName + " (исключение не брошено)");
+        } catch (Exception e) {
+            assertTrue(false,
                     testName + " (брошено " + e.getClass().getSimpleName() + ": " + e.getMessage() + ")");
         }
     }
