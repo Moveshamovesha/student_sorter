@@ -1,11 +1,11 @@
 package com.team.studentsorter.input;
 
 import com.team.studentsorter.model.Student;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -19,17 +19,16 @@ public class FileDataFiller implements DataFiller {
 
     private final Path filePath;
 
-    public FileDataFiller(Path filePath) {
+    public FileDataFiller(Path filePath) throws IllegalArgumentException {
+        if (Files.notExists(filePath)) {
+            throw new IllegalArgumentException("Файл с данными студентов не найден.");
+        }
+
         this.filePath = filePath;
     }
 
-    // TODO: проверить
     @Override
-    public List<Student> fill(int size) throws MissingResourceException {
-        if (filePath == null) {
-            throw new MissingResourceException("Путь до файла с данными студентов не указан.", "com.team.studentsorter.input.FileDataFiller", "filePath");
-        }
-
+    public List<Student> fill(int size) {
         AtomicInteger rejectedLines = new AtomicInteger(0);
         List<Student> result;
 
@@ -50,7 +49,6 @@ public class FileDataFiller implements DataFiller {
         return List.of();
     }
 
-    // TODO: проверить
     private Student parseLine(String line) {
         String[] raws = line.split(";");
 

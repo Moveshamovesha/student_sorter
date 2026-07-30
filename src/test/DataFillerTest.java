@@ -1,12 +1,17 @@
 package test;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
+import com.team.studentsorter.input.FileDataFiller;
 import com.team.studentsorter.input.ManualDataFiller;
 import com.team.studentsorter.input.RandomDataFiller;
 import com.team.studentsorter.model.Student;
@@ -16,7 +21,7 @@ public class DataFillerTest {
     static public void run() {
         testRandomFiller();
         testManualFiller();
-        // testFromFileFiller();
+        testFromFileFiller();
     }
 
     static private void testRandomFiller() {
@@ -39,8 +44,6 @@ public class DataFillerTest {
             () -> target.fill(-1),
             "RandomDataFiller: исключение при создании списка из -1 элементов"
         );
-
-        System.out.println(target.fill(50));
     }
 
     static private void testManualFiller() {
@@ -118,9 +121,74 @@ public class DataFillerTest {
     }
 
     static private void testFromFileFiller() {
-        // FileDataFiller target = new FileDataFiller(null);
+        testFileTrows();
+        testFile();
     }
 
+    static private void testFile() {
+        TestFileMock mock = new TestFileMock(
+            "./temp.txt",
+            
+            "1;4.5;100234\n" +
+            "102;3.8;100237\n" +
+            "это не студент\n" +
+            "105;4.9\n" +
+            "210;7.5;100301\n" +
+            "308;5.0;99\n" +
+            "115;три;100278\n" +
+            ";4.0;100300\n" +
+            "999;4.4;100399"
+        );
+
+        try {
+            mock.createFile();
+        } catch (IOException e) {
+            SimpleAssert.assertTrue(false, "FileDataFiller: Ошибка при создании тестового файла: " + e.getMessage());
+            return;
+        } 
+
+        FileDataFiller target;
+        try {
+            target = new FileDataFiller(mock.getPath());
+        } catch (IllegalArgumentException e) {
+            SimpleAssert.assertTrue(false, "FileDataFiller: Ошибка при открытии тестового файла: " + e.getMessage());
+            return;
+        }
+
+        ConsoleWrapper.muteOut();
+        List<Student> students = target.fill(3);
+        ConsoleWrapper.restore();
+
+        SimpleAssert.assertEquals(
+            3,
+            students.size(),
+            "FileDataFiller: в файле успешно найдены 3 правильных записей"
+        );
+
+        var record1 = students.get(0);
+        var record2 = students.get(1);
+        var record3 = students.get(2);
+        SimpleAssert.assertTrue(
+            record1.getGroupNumber() == 1 && record1.getAverageGrade() == 4.5 && record1.getRecordBookNumber() == 100234 &&
+            record2.getGroupNumber() == 102 && record2.getAverageGrade() == 3.8 && record2.getRecordBookNumber() == 100237 &&
+            record3.getGroupNumber() == 999 && record3.getAverageGrade() == 4.4 && record3.getRecordBookNumber() == 100399,
+            "FileDataFiller: все значения в 3 записях правильно прочитаны"
+        );
+
+        try {
+            mock.deleteFile();
+        } catch (IOException e) {
+            SimpleAssert.assertTrue(false, "FileDataFiller: Ошибка при удалении тестового файла: " + e.getMessage());
+        }
+
+    }
+
+    static private void testFileTrows() {
+        SimpleAssert.assertThrows(
+            IllegalArgumentException.class,
+            () -> new FileDataFiller(Path.of("./foo.bar")), 
+            "FileDataFiller: исключение при ссылке на несуществующий файл.");
+    }
 }
 
 class ConsoleWrapper {
@@ -138,5 +206,34 @@ class ConsoleWrapper {
 
     public static void muteOut() {
         System.setOut(new PrintStream(new OutputStream() { public void write(int b) {} }));
+    }
+}
+
+class TestFileMock {
+    final private String tempFileName;
+    final private Path tempFile;
+    final private String testContentFile;
+
+    public TestFileMock(String path, String content) {
+        this.testContentFile = content;
+        this.tempFileName = path;
+        this.tempFile = Path.of(path);
+    }
+
+    public void createFile() throws IOException {
+        if (Files.exists(tempFile)) {
+            throw new FileAlreadyExistsException("Тестовый файл \"" + tempFileName + "\" существует. Удалите для продолжения теста.");
+        }
+        
+        Files.createFile(tempFile);
+        Files.writeString(tempFile, testContentFile);
+    }
+
+    public Path getPath() {
+        return tempFile;
+    }
+
+    public void deleteFile() throws IOException {
+        Files.delete(tempFile);
     }
 }
