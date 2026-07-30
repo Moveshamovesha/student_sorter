@@ -1,4 +1,4 @@
-package test;
+package com.team.studentsorter;
 
 import com.team.studentsorter.validation.StudentValidator;
 

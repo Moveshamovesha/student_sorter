@@ -1,4 +1,4 @@
-package test;
+package com.team.studentsorter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

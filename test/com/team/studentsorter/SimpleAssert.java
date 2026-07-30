@@ -1,4 +1,4 @@
-package test;
+package com.team.studentsorter;
 
 public class SimpleAssert {
     private static int passed = 0;
