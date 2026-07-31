@@ -3,7 +3,6 @@ package test;
 import com.team.studentsorter.model.Student;
 import com.team.studentsorter.search.BinarySearch;
 import com.team.studentsorter.sort.StudentComparators;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class BinarySearchTest {
 
     private static void testSearchFirstElement() {
         List<Student> list = createSortListStudent();
-        int result= BinarySearch.indexOf(list, list.get(0), StudentComparators.BY_RECORD_BOOK);
+        int result= BinarySearch.indexOf(list, list.getFirst(), StudentComparators.BY_RECORD_BOOK);
         Student student = list.get(result);
         Student student1 = createStudent(1, 4.5, 10);
         check(student.equals(student1), "Поиск первого элемента");
@@ -39,7 +38,7 @@ public class BinarySearchTest {
 
     private static void testSearchLastElement() {
         List<Student> list = createSortListStudent();
-        int result= BinarySearch.indexOf(list, list.get(list.size()-1), StudentComparators.BY_RECORD_BOOK);
+        int result= BinarySearch.indexOf(list, list.getLast(), StudentComparators.BY_RECORD_BOOK);
         Student student = list.get(result);
         Student student1 = createStudent(1, 4.9, 110);
         check(student.equals(student1), "Поиск последнего элемента");
@@ -47,7 +46,7 @@ public class BinarySearchTest {
 
     private static void testSearchMissingElement() {
         List<Student> list = createSortListStudent();
-        int result= BinarySearch.indexOf(list, list.get(0), StudentComparators.BY_RECORD_BOOK);
+        int result= BinarySearch.indexOf(list, list.getFirst(), StudentComparators.BY_RECORD_BOOK);
         Student student = list.get(result);
         Student student1 = createStudent(0, 0, 0);
         check(!student.equals(student1), "Поиск отсутствующего элемента");
@@ -57,7 +56,7 @@ public class BinarySearchTest {
         Student student = createStudent(1, 5, 10);
         List<Student> list = List.of(student);
         int result = BinarySearch.indexOf(list, student, StudentComparators.BY_RECORD_BOOK);
-        check(result ==  1, "Поиск в списке из одного элемента");
+        check(result ==  0, "Поиск в списке из одного элемента");
     }
 
     private static void testSearchEmptyList() {

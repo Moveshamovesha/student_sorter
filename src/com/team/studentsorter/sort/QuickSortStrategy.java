@@ -3,8 +3,6 @@ package com.team.studentsorter.sort;
 import java.util.Comparator;
 import java.util.List;
 
-// Реализация — Шамиль, ветка feature/sort
-
 public class QuickSortStrategy<T> implements SortStrategy<T> {
     @Override
     public void sort(List<T> list, Comparator<T> comparator) {
@@ -13,6 +11,7 @@ public class QuickSortStrategy<T> implements SortStrategy<T> {
         }
         quickSort(list, 0, list.size() - 1, comparator);
     }
+
     private static <T> void quickSort(List<T> list, int left, int right, Comparator<T> comparator) {
         if (left >= right) {
             return;
