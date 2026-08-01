@@ -22,23 +22,29 @@ public class FillAction implements MenuAction {
         int source = context.getInput().readInt("Ваш выбор: ");
         int length = context.getInput().readPositiveInt("Длина массива: ");
 
-        DataFiller filler = switch (source) {
-            case 1 -> {
-                String path = context.getInput().readLine("Путь к файлу [data/students.txt]: ");
-                yield new FileDataFiller(Path.of(path.isEmpty() ? "data/students.txt" : path));
-            }
-            case 2 -> new RandomDataFiller();
-            case 3 -> new ManualDataFiller(context.getInput().getScanner());
-            default -> {
-                System.out.println("Нет такого источника.");
-                yield null;
-            }
-        };
+        DataFiller filler;
+        try {
+            filler = switch (source) {
+                case 1 -> {
+                    String path = context.getInput().readLine("Путь к файлу [data/students.txt]: ");
+                    yield new FileDataFiller(Path.of(path.isEmpty() ? "data/students.txt" : path));
+                }
+                case 2 -> new RandomDataFiller();
+                case 3 -> new ManualDataFiller(context.getInput().getScanner());
+                default -> {
+                    System.out.println("Нет такого источника.");
+                    yield null;
+                }
+            };
+        } catch (IllegalArgumentException e) {
+            System.out.println("Не удалось открыть файл: " + e.getMessage());
+            return;
+        }
         if (filler == null) {
             return;
         }
 
-        context.setStudents(filler.fill(length)); // паттерн Стратегия
+        context.setStudents(filler.fill(length));
         System.out.println("Загружено студентов: " + context.getStudents().size());
     }
 }
