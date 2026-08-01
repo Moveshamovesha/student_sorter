@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileDataFiller implements DataFiller {
-    final private int GROUP_NUMBER = 0;
-    final private int AVERAGE_GRADE = 1;
-    final private int RECORD_BOOK_NUMBER = 2;
-    final private int TOTAL = 3;
+    private static final int GROUP_NUMBER = 0;
+    private static final int AVERAGE_GRADE = 1;
+    private static final int RECORD_BOOK_NUMBER = 2;
+    private static final int TOTAL = 3;
 
     private final Path filePath;
 
@@ -52,7 +52,7 @@ public class FileDataFiller implements DataFiller {
     private Student parseLine(String line) {
         String[] raws = line.split(";");
 
-        if (raws.length < TOTAL) return null;
+        if (raws.length != TOTAL) return null;
 
         try {
             return new Student.Builder()
