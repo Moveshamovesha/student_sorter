@@ -1,6 +1,8 @@
 package com.team.studentsorter.threads;
 
 import com.team.studentsorter.model.Student;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -9,14 +11,48 @@ public class OccurrenceCounter {
     /** Считает вхождения target в list, используя threadCount потоков. */
     public static int count(List<Student> list, Student target, int threadCount)
             throws InterruptedException, ExecutionException {
-        // TODO (Аркадий):
-        // 1. Разбить list на threadCount примерно равных кусков (subList).
-        // 2. ExecutorService pool = Executors.newFixedThreadPool(threadCount);
-        // 3. Для каждого куска submit(Callable), который считает
-        //    вхождения target через equals (циклом, БЕЗ готовых поисков).
-        // 4. Сложить результаты всех Future.get(), вернуть сумму.
-        // 5. pool.shutdown() в finally.
-        // Результат вывести в консоль в месте вызова (из меню).
-        return 0;
+
+        if (threadCount <= 0)
+            throw new IllegalArgumentException("Количество потоков должно быть больше 0");
+
+        if (list.isEmpty())
+            return 0;
+
+        int workers = Math.min(threadCount, list.size());
+        ExecutorService pool = Executors.newFixedThreadPool(workers);
+        List<Future<Integer>> futures = new ArrayList<>();
+
+        int totalSize = list.size();
+        int chunkSize = (int) Math.ceil(totalSize / (double) threadCount);
+
+        try {
+            for (int i = 0; i < threadCount; i++) {
+                int start = i * chunkSize;
+                int end = Math.min(start + chunkSize, totalSize);
+                if (start >= end) break;
+
+                List<Student> sub = list.subList(start, end);
+
+                Callable<Integer> task = () -> {
+                    int count = 0;
+                    for (Student s : sub) {
+                        if (s.equals(target))
+                            count++;
+                    }
+                    return count;
+                };
+
+                futures.add(pool.submit(task));
+            }
+
+            int sum = 0;
+            for (Future<Integer> f : futures)
+                sum += f.get();
+
+            return sum;
+
+        } finally {
+            pool.shutdown();
+        }
     }
 }
