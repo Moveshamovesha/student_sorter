@@ -5,9 +5,9 @@ public class TestRunner {
         StudentTest.run();
         // ValidatorTest.run();        // Максим — раскомментировать на интеграции
         // DataFillerTest.run();       // Максим
-        // SortTest.run();             // Шамиль
-        // EvenFieldSortTest.run();    // Шамиль
-        // BinarySearchTest.run();     // Шамиль
+        SortTest.run();             // Шамиль
+        EvenFieldSortTest.run();    // Шамиль
+        BinarySearchTest.run();     // Шамиль
         // StudentListTest.run();      // Аркадий
         // ResultWriterTest.run();     // Аркадий
         // OccurrenceCounterTest.run();// Аркадий
