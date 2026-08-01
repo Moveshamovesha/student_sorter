@@ -30,6 +30,16 @@ public class SimpleAssert {
         }
     }
 
+    public static void assertNoThrows(Runnable code, String testName) {
+        try {
+            code.run();
+            assertTrue(true, testName + " (исключение не брошено)");
+        } catch (Exception e) {
+            assertTrue(false,
+                    testName + " (брошено " + e.getClass().getSimpleName() + ": " + e.getMessage() + ")");
+        }
+    }
+
     public static void printSummary() {
         System.out.println("========================================");
         System.out.println("ИТОГО: " + passed + " passed, " + failed + " failed");
