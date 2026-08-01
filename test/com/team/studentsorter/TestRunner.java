@@ -3,8 +3,8 @@ package com.team.studentsorter;
 public class TestRunner {
     public static void main(String[] args) {
         StudentTest.run();
-        // ValidatorTest.run();        // Максим — раскомментировать на интеграции
-        // DataFillerTest.run();       // Максим
+        ValidatorTest.run();        // Максим — раскомментировать на интеграции
+        DataFillerTest.run();       // Максим
         SortTest.run();             // Шамиль
         EvenFieldSortTest.run();    // Шамиль
         BinarySearchTest.run();     // Шамиль

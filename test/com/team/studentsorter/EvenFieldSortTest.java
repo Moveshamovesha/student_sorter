@@ -1,3 +1,4 @@
+package com.team.studentsorter;
 import com.team.studentsorter.model.Student;
 import com.team.studentsorter.sort.EvenFieldSort;
 import com.team.studentsorter.sort.QuickSortStrategy;
@@ -65,19 +66,17 @@ public class EvenFieldSortTest {
 
 
     private static List<Student> createStudents() {
-
         return new ArrayList<>(List.of(
-
-                createStudent(1, 4.5, 556),
-                createStudent(2, 4.7, 310),
-                createStudent(3, 3.9, 245),
-                createStudent(4, 5.0, 700),
-                createStudent(5, 4.7, 425),
-                createStudent(1, 4.5, 569),
-                createStudent(2, 4.2, 800),
-                createStudent(3, 3.9, 211),
-                createStudent(4, 5.0, 787),
-                createStudent(5, 4.7, 118)
+                createStudent(1, 4.5, 100556),
+                createStudent(2, 4.7, 100310),
+                createStudent(3, 3.9, 100245),
+                createStudent(4, 5.0, 100700),
+                createStudent(5, 4.7, 100425),
+                createStudent(1, 4.5, 100569),
+                createStudent(2, 4.2, 100800),
+                createStudent(3, 3.9, 100211),
+                createStudent(4, 5.0, 100787),
+                createStudent(5, 4.7, 100118)
         ));
     }
 
@@ -115,11 +114,6 @@ public class EvenFieldSortTest {
 
 
     private static void check(boolean condition, String testName) {
-
-        if (condition) {
-            System.out.println(testName + " - пройден");
-        } else {
-            System.out.println(testName + " - НЕ пройден");
-        }
+        SimpleAssert.assertTrue(condition, testName);
     }
 }
