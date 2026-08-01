@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BinarySearchTest {
 
-    public static void main(String[] args) {
+    public static void run() {
         testSearchExistingElement();
         testSearchFirstElement();
         testSearchLastElement();
