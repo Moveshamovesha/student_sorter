@@ -165,3 +165,10 @@ java -cp out com.team.studentsorter.TestRunner
 ## Git-воркфлоу
 
 Каждый участник работает в своей ветке (`feature/model-menu`, `feature/input`, `feature/sort`, `feature/extras`). После завершения и ревью ветки последовательно мержатся в `main` с `--no-ff`, чтобы в истории сохранились merge-коммиты.
+
+## Roadmap (что бы улучшили дальше)
+
+- Случайный выбор pivot в quicksort (защита от O(n²))
+- Сортировка в новый список (immutable-стиль) как опция
+- Even-sort по произвольному числовому полю и выбор чётности
+- Benchmark-режим сравнения стратегий
