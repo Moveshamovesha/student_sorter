@@ -7,6 +7,7 @@ import com.team.studentsorter.search.BinarySearch;
 import com.team.studentsorter.sort.QuickSortStrategy;
 import com.team.studentsorter.sort.StudentComparators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FindAction implements MenuAction {
@@ -19,7 +20,7 @@ public class FindAction implements MenuAction {
     @Override
     public void execute(AppContext context) {
         if (!context.hasData()) return;
-        List<Student> students = context.getStudents();
+        List<Student> students = new ArrayList<>(context.getStudents());
 
         new QuickSortStrategy<Student>().sort(students, StudentComparators.BY_RECORD_BOOK);
 

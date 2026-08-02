@@ -31,7 +31,8 @@ public class CountAction implements MenuAction {
         }
 
         try {
-            int count = OccurrenceCounter.count(context.getStudents(), target, 2);
+            int threads = context.getInput().readPositiveInt("Число потоков: ");
+            int count = OccurrenceCounter.count(context.getStudents(), target, threads);
             System.out.println("Вхождений студента " + target + ": " + count);
         } catch (Exception e) {
             System.out.println("Ошибка при подсчёте: " + e.getMessage());

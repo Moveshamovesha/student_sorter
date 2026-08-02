@@ -21,6 +21,8 @@ public class SortTest {
         List<Student> students2 = createStudents();
         boolean result2 = checkSortedStudents(students2, selectionSortStrategy);
         check(result2, "SelectionSortStrategy");
+
+        edgeCases();
     }
 
     private static List<Student> createStudents() {
@@ -59,5 +61,25 @@ public class SortTest {
             }
         }
         return true;
+    }
+
+    private static void edgeCases() {
+        // пустой список — обе стратегии не падают
+        List<Student> empty = new ArrayList<>();
+        new QuickSortStrategy<Student>().sort(empty, StudentComparators.BY_GROUP);
+        new SelectionSortStrategy<Student>().sort(empty, StudentComparators.BY_GROUP);
+        check(empty.isEmpty(), "Sort: пустой список");
+
+        // один элемент — не падает, не меняется
+        List<Student> single = new ArrayList<>(List.of(createStudent(1, 4.0, 100500)));
+        new QuickSortStrategy<Student>().sort(single, StudentComparators.BY_GROUP);
+        check(single.size() == 1 && single.get(0).getRecordBookNumber() == 100500,
+                "Sort: один элемент");
+
+        // повторная сортировка уже отсортированного — пограничный случай quicksort
+        List<Student> sorted = createStudents();
+        new QuickSortStrategy<Student>().sort(sorted, StudentComparators.BY_RECORD_BOOK);
+        check(checkSortedStudents(sorted, new QuickSortStrategy<>()),
+                "Sort: повторная сортировка отсортированного");
     }
 }

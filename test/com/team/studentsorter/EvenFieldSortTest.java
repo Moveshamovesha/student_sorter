@@ -5,7 +5,7 @@ import com.team.studentsorter.sort.QuickSortStrategy;
 import com.team.studentsorter.sort.SelectionSortStrategy;
 import com.team.studentsorter.sort.SortStrategy;
 import java.util.*;
-import java.util.stream.IntStream;
+
 
 public class EvenFieldSortTest {
 
@@ -19,35 +19,20 @@ public class EvenFieldSortTest {
     }
 
     private static void testWithQuickSort() {
-        QuickSortStrategy<Student> quickSortStrategy= new QuickSortStrategy<>();
-
+        QuickSortStrategy<Student> strategy = new QuickSortStrategy<>();
         List<Student> students = createStudents();
-
-        EvenFieldSort.sortEvenByRecordBook(
-                students,
-                quickSortStrategy
-        );
-
-        boolean result = checkSortedEvenStudents(students, quickSortStrategy);
-
-        check(result, "EvenFieldSort + QuickSortStrategy");
+        List<Student> before = new ArrayList<>(students);   // снимок ДО сортировки
+        EvenFieldSort.sortEvenByRecordBook(students, strategy);
+        check(checkSortedEvenStudents(before, students), "EvenFieldSort + QuickSortStrategy");
     }
 
 
     private static void testWithSelectionSort() {
-
-        SelectionSortStrategy<Student> selectionSortStrategy= new SelectionSortStrategy<>();
-
+        SelectionSortStrategy<Student> strategy = new SelectionSortStrategy<>();
         List<Student> students = createStudents();
-
-        EvenFieldSort.sortEvenByRecordBook(
-                students, selectionSortStrategy
-
-        );
-
-        boolean result = checkSortedEvenStudents(students, selectionSortStrategy);
-
-        check(result, "EvenFieldSort + SelectionSortStrategy");
+        List<Student> before = new ArrayList<>(students);
+        EvenFieldSort.sortEvenByRecordBook(students, strategy);
+        check(checkSortedEvenStudents(before, students), "EvenFieldSort + SelectionSortStrategy");
     }
 
 
@@ -80,22 +65,22 @@ public class EvenFieldSortTest {
         ));
     }
 
-
-    private static boolean checkSortedEvenStudents(List<Student> students, SortStrategy<Student> strategy) {
-        List<Student> copyListStudents = new ArrayList<>(students);
-        List<Integer> listIndex = IntStream.range(0, students.size())
-                .filter(i -> students.get(i).getRecordBookNumber() % 2 == 0)
-                .boxed()
-                .toList();
-        List<Student> sortedList = listIndex.stream()
-                .map(students::get)
-                .sorted(Comparator.comparing(Student::getRecordBookNumber))
-                .toList();
-        IntStream.range(0, sortedList.size())
-                .forEach(i -> students.set(listIndex.get(i), sortedList.get(i)));
-
-        return IntStream.range(0, students.size())
-                .allMatch(i -> students.get(i).equals(copyListStudents.get(i)));
+    private static boolean checkSortedEvenStudents(List<Student> before, List<Student> after) {
+        for (int i = 0; i < after.size(); i++) {
+            if (after.get(i).getRecordBookNumber() % 2 != 0
+                    && !after.get(i).equals(before.get(i))) {
+                return false; // нечётный съехал с места
+            }
+        }
+        int prev = Integer.MIN_VALUE;
+        for (Student s : after) {
+            int book = s.getRecordBookNumber();
+            if (book % 2 == 0) {
+                if (book < prev) return false; // чётные не упорядочены
+                prev = book;
+            }
+        }
+        return true;
     }
 
 

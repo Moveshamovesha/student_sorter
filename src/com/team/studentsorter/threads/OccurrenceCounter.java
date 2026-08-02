@@ -23,7 +23,7 @@ public class OccurrenceCounter {
         List<Future<Integer>> futures = new ArrayList<>();
 
         int totalSize = list.size();
-        int chunkSize = (int) Math.ceil(totalSize / (double) threadCount);
+        int chunkSize = (int) Math.ceil(totalSize / (double) workers);
 
         try {
             for (int i = 0; i < threadCount; i++) {

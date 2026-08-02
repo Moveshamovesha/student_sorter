@@ -6,6 +6,7 @@ import com.team.studentsorter.input.ManualDataFiller;
 import com.team.studentsorter.input.RandomDataFiller;
 import com.team.studentsorter.menu.AppContext;
 import com.team.studentsorter.menu.MenuAction;
+import com.team.studentsorter.collection.StudentList;
 
 import java.nio.file.Path;
 
@@ -44,7 +45,9 @@ public class FillAction implements MenuAction {
             return;
         }
 
-        context.setStudents(filler.fill(length));
+        StudentList filled = new StudentList();
+        filled.addAll(filler.fill(length));
+        context.setStudents(filled);   // в AppContext теперь живёт кастомная коллекция
         System.out.println("Загружено студентов: " + context.getStudents().size());
     }
 }

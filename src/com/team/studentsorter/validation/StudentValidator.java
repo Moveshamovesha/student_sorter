@@ -12,7 +12,7 @@ public class StudentValidator {
         StringBuilder message = new StringBuilder();
 
         if (!checkGroupNumber(groupNumber))
-            message.append("Номер Группы: >1, трёхзначное число;");
+            message.append("Номер Группы: целое от 1 до 999;");
 
         if (!checkAverageGrade(averageGrade))
             message.append("Средняя оценка: число в диапазоне 2.0 - 5.0 включительно;");
