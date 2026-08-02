@@ -41,6 +41,10 @@ public class FileDataFiller implements DataFiller {
                 .collect(Collectors.toList());
             
             System.out.println("Файл прочитан. Отброшено записей: " + rejectedLines.get());
+            if (result.size() < size) {
+                System.out.println("Внимание: в файле нашлось только " + result.size()
+                        + " валидных записей из " + size + " запрошенных.");
+            }
             return result;
         } catch (IOException e) {
             System.err.println("Ошибка чтения файла: " + e.getMessage());
